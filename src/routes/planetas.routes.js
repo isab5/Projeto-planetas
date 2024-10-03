@@ -17,16 +17,37 @@ planetasRoutes.get("/", (req, res) => {
 });
 
 planetasRoutes.post("/", (req, res) => {
-    const { titulo, genero, emCartaz } = req.body;
+    const { 
+        nome,
+        temperatura,
+        agua,
+        atm
+    } = req.body;
 
-    const novoFilme = {
-    id: Number(Math.floor(Math.random() * 99) + 1),
-    titulo,
-    genero,
-    emCartaz,
+    if (!nome || !temperatura || !agua) {
+        return res.status(400).send({ message: "Os campos nome, temperatura e água são obrigatórios!",
+        })
+    }
+
+    // Validação de existência de água
+    
+    if (agua != "sim" && agua != "não") {
+        return res.status(400).send({ message: "Digite 'sim' ou 'não'!",
+        })
+    }
+
+    const novoPlaneta = {
+    id: Number(Math.floor(Math.random() * 999999) + 1),
+    nome,
+    temperatura,
+    agua,
+    atm
     };
 
-    planetas.push(novoFilme);
+    planetas.push(novoPlaneta);
+    return res.status(201).send ({
+        message: "Planeta cadastrado!", novoPlaneta,
+    })
 
     return res.status(201).send(planetas);
 });
